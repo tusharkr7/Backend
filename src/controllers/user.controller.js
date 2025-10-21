@@ -1,7 +1,7 @@
 import { asyncHandler } from '../utils/asyncHandler.js'
 import {ApiError} from '../utils/ApiError.js'
 import { ApiResponse } from '../utils/ApiResponse.js'
-import { uploadOnClodianry } from '../utils/cloudinary.js'
+import { uploadOnCloudianry } from '../utils/cloudinary.js'
 import {User} from '../models/user.model.js'
 
 const registerUser = asyncHandler(async(req,res)=>{
@@ -24,7 +24,7 @@ const registerUser = asyncHandler(async(req,res)=>{
         throw new ApiError(400,"All fields are required ")
     }
     
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or:[{ email },{ username }]
     })
 
@@ -39,8 +39,8 @@ const registerUser = asyncHandler(async(req,res)=>{
         throw new ApiError(400,"Avatar file is required")   
     }
 
-    const avatar = await uploadOnClodianry(avatarLocalPath)
-    const coverImage = await uploadOnClodianry(coverImageLocalPath)
+    const avatar = await uploadOnCloudianry(avatarLocalPath)
+    const coverImage = await uploadOnCloudianry(coverImageLocalPath)
 
     if(!avatar){
         throw new ApiError(400,"Avatar file is required")
